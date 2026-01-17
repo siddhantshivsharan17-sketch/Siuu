@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Ammy 🌷</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Great+Vibes&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: radial-gradient(circle at top, #fff6f0, #fdecef 60%, #f7d9c4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Playfair Display', serif;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Falling Petals */
+        .petal {
+            position: absolute;
+            width: 14px;
+            height: 18px;
+            background: rgba(255, 182, 193, 0.8);
+            border-radius: 60% 10% 60% 10%;
+            animation: float linear infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes float {
+            from {
+                transform: translateY(-10vh) rotate(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            to {
+                transform: translateY(110vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .scene {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+        }
+
+        .flower {
+            position: absolute;
+            font-size: 40px;
+            animation: sway 6s ease-in-out infinite;
+            z-index: 2;
+        }
+
+        @keyframes sway {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg) translateY(-10px); }
+        }
+
+        /* Envelope & Letter */
+        .envelope {
+            width: 280px;
+            height: 180px;
+            background: #fdfaf7;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .envelope:hover {
+            transform: scale(1.02);
+        }
+
+        .label {
+            font-family: 'Great Vibes', cursive;
+            font-size: 32px;
+            color: #c56b7a;
+            pointer-events: none;
+        }
+
+        .letter {
+            position: absolute;
+            bottom: 20px;
+            width: 260px;
+            height: 380px;
+            background: #fff;
+            border-radius: 6px;
+            padding: 25px 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            transform: translateY(100%) scale(0.8);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow-y: auto;
+            z-index: 15;
+        }
+
+        .letter.open {
+            transform: translateY(-120px) scale(1);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .letter h1 {
+            font-family: 'Great Vibes', cursive;
+            color: #d16c7c;
+            text-align: center;
+            margin-top: 0;
+            font-size: 2.2rem;
+        }
+
+        .letter p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #444;
+            text-align: center;
+            white-space: pre-wrap;
+            margin-bottom: 20px;
+        }
+
+        /* Lock Screen */
+        .lock {
+            position: fixed;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.98);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            padding: 20px;
+            text-align: center;
+            transition: opacity 0.5s ease;
+        }
+
+        .lock h2 {
+            color: #d16c7c;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .lock input {
+            padding: 12px 20px;
+            border-radius: 25px;
+            border: 2px solid #fdecef;
+            outline: none;
+            width: 100%;
+            max-width: 250px;
+            font-size: 16px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            margin-bottom: 15px;
+        }
+
+        .lock button {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            background: #d16c7c;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .lock button:active {
+            transform: scale(0.95);
+        }
+
+        /* Custom Toast Notification */
+        #toast {
+            position: fixed;
+            top: 20px;
+            background: #d16c7c;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 14px;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.3s ease;
+            z-index: 200;
+        }
+
+        .music-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            z-index: 50;
+            font-size: 20px;
+        }
+
+        .music-btn.playing {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @media (max-width: 480px) {
+            .scene { height: 500px; }
+            .envelope { width: 240px; height: 160px; }
+            .letter { width: 220px; height: 350px; }
+            .label { font-size: 26px; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="toast">Wrong password 🥺</div>
+
+<div class="lock" id="lock">
+    <h2>Only for Ammyyyy 💗</h2>
+    <input type="password" id="pass" placeholder="Enter password" autocomplete="off">
+    <button onclick="unlock()">Open 💌</button>
+</div>
+
+<div class="music-btn" id="musicBtn" onclick="toggleMusic()">🎵</div>
+<audio id="bgm" loop>
+    <source src="https://cdn.pixabay.com/audio/2023/03/28/audio_6c1b6e6c88.mp3" type="audio/mpeg">
+</audio>
+
+<div class="scene">
+    <div class="flower" style="top:5%; left:10%">🌷</div>
+    <div class="flower" style="top:15%; right:10%">🌻</div>
+    <div class="flower" style="bottom:10%; left:15%">🌸</div>
+
+    <div class="envelope" onclick="toggleLetter()">
+        <div class="label">For someone special 🌷</div>
+    </div>
+
+    <div class="letter" id="letter">
+        <h1>My Dear Ammyyyy 🌷</h1>
+        <p id="typedText"></p>
+    </div>
+</div>
+
+<script>
+    const PASSWORD = "ammy";
+    const message = `Tere baare mein likhte waqt mere words kam pad jaate hain,
+kyunki jo feel main tere liye karta hoon na,
+woh sirf mera dil samajh sakta hai ❤️
+
+Tu meri zindagi ka woh hissa hai jiske bina sab adhoora lagta hai.
+Tu meri life ki sabse precious cheez hai, Ammyyyy 🌷
+
+Chahe duniya kuch bhi kahe,
+chahe situations kitni bhi tough ho jaayein,
+main hamesha tere saath rahunga 🫶
+
+Aur teri smileeee…
+woh meri duniya ki sabse khoobsurat cheez hai.
+Kabhi muskurana band mat karna,
+kyunki main hoon hamesha 
+tujhe hasane ke liye 💖
+
+Ilyyyyyyyyyyysssmmmmmm Ammyyyy ❤️`;
+
+    function showToast() {
+        const toast = document.getElementById('toast');
+        toast.style.opacity = '1';
+        toast.style.transform = 'translateY(0)';
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateY(-20px)';
+        }, 2000);
+    }
+
+    function unlock() {
+        const input = document.getElementById("pass").value.toLowerCase();
+        if (input === PASSWORD) {
+            const lock = document.getElementById("lock");
+            lock.style.opacity = "0";
+            setTimeout(() => {
+                lock.style.display = "none";
+            }, 500);
+            startPetals();
+        } else {
+            showToast();
+        }
+    }
+
+    function toggleLetter() {
+        const letter = document.getElementById('letter');
+        const isOpen = letter.classList.toggle('open');
+        
+        if (isOpen && document.getElementById('typedText').textContent === "") {
+            typeText();
+        }
+    }
+
+    let charIndex = 0;
+    function typeText() {
+        const el = document.getElementById("typedText");
+        if (charIndex < message.length) {
+            el.textContent += message[charIndex];
+            charIndex++;
+            // Scroll to bottom as it types
+            const letter = document.getElementById('letter');
+            letter.scrollTop = letter.scrollHeight;
+            setTimeout(typeText, 45);
+        }
+    }
+
+    function toggleMusic() {
+        const m = document.getElementById("bgm");
+        const btn = document.getElementById("musicBtn");
+        if (m.paused) {
+            m.play();
+            btn.classList.add('playing');
+        } else {
+            m.pause();
+            btn.classList.remove('playing');
+        }
+    }
+
+    function startPetals() {
+        for (let i = 0; i < 20; i++) {
+            createPetal();
+        }
+    }
+
+    function createPetal() {
+        const p = document.createElement("div");
+        p.className = "petal";
+        p.style.left = Math.random() * 100 + "vw";
+        p.style.animationDuration = (Math.random() * 5 + 5) + "s";
+        p.style.opacity = Math.random();
+        p.style.width = (Math.random() * 10 + 10) + "px";
+        p.style.height = (Math.random() * 10 + 10) + "px";
+        document.body.appendChild(p);
+        
+        // Remove and recreate to keep loop going
+        p.addEventListener('animationiteration', () => {
+            p.style.left = Math.random() * 100 + "vw";
+        });
+    }
+
+    // Add keyboard support for password
+    document.getElementById('pass').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            unlock();
+        }
+    });
+
+    window.onload = () => {
+        // Prepare some petals even before unlock for background atmosphere
+        for (let i = 0; i < 8; i++) {
+            createPetal();
+        }
+    };
+</script>
+
+</body>
+</html>
